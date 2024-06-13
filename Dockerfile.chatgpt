@@ -1,0 +1,54 @@
+FROM ubuntu:focal
+
+# Set environment variable to avoid interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update the package list and install necessary packages
+RUN apt-get update && apt-get install -y \
+    software-properties-common \
+    python3-pip \
+    wget \
+    git \
+    mercurial \
+    make \
+    ruby \
+    ruby-dev \
+    build-essential \
+    rpm \
+    zip \
+    python3 \
+    && pip3 install boto3 \
+    && gem install fpm \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Setup environment variables
+ENV GOPATH /root/go
+ENV PROJECT_DIR $GOPATH/src/github.com/influxdata/influxdb
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+
+# Create project directory
+RUN mkdir -p $PROJECT_DIR
+
+# Define volumes
+VOLUME $PROJECT_DIR
+
+# Install Go
+ENV GO_VERSION 1.16.15
+ENV GO_ARCH amd64
+RUN wget --no-verbose https://storage.googleapis.com/golang/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz \
+    && tar -C /usr/local/ -xf go${GO_VERSION}.linux-${GO_ARCH}.tar.gz \
+    && rm go${GO_VERSION}.linux-${GO_ARCH}.tar.gz
+
+# Clone Go tip for compilation
+ENV GOROOT_BOOTSTRAP /usr/local/go
+RUN git clone https://go.googlesource.com/go /usr/local/go-tip
+ENV PATH /usr/local/go-tip/bin:$PATH
+
+# Add script for compiling Go
+ENV GO_CHECKOUT master
+ADD ./gobuild.sh /gobuild.sh
+RUN chmod +x /gobuild.sh
+
+# Set entrypoint
+ENTRYPOINT [ "/gobuild.sh" ]
+

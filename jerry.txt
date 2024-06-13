@@ -1,0 +1,35 @@
+restart docker
+adding user to docker group
+sudo groupadd docker
+sudo usermod -aG docker $USER
+# log out and log back in
+
+# restart docker
+sudo systemctl restart docker
+
+ln -s Dockerfile_build_ubuntu32 Dockerfile
+docker build - < Dockerfile
+
+
+docker-compse up -d
+dcl
+
+[ap03]itri@ap03:~/influxdb_clustered/influxdb-cluster$ dcl
+CONTAINER ID   IMAGE                                     COMMAND                  CREATED        STATUS        PORTS                                       NAMES
+db626592ce45   chengshiwen/influxdb:1.8.10-c1.1.2-data   "/entrypoint.sh infl…"   14 hours ago   Up 14 hours   0.0.0.0:8286->8086/tcp, :::8286->8086/tcp   influxdb-data-02
+ce81d2ab2d57   chengshiwen/influxdb:1.8.10-c1.1.2-meta   "/entrypoint.sh infl…"   14 hours ago   Up 14 hours   8091/tcp                                    influxdb-meta-03
+c44ca9031570   chengshiwen/influxdb:1.8.10-c1.1.2-meta   "/entrypoint.sh infl…"   14 hours ago   Up 14 hours   8091/tcp                                    influxdb-meta-01
+0a8f80ab6e00   chengshiwen/influxdb:1.8.10-c1.1.2-meta   "/entrypoint.sh infl…"   14 hours ago   Up 14 hours   8091/tcp                                    influxdb-meta-02
+5f840a94461d   chengshiwen/influxdb:1.8.10-c1.1.2-data   "/entrypoint.sh infl…"   14 hours ago   Up 14 hours   0.0.0.0:8186->8086/tcp, :::8186->8086/tcp   influxdb-data-01
+
+# create db
+curl -XPOST "http://localhost:8186/query" --data-urlencode "q=CREATE DATABASE mydb WITH REPLICATION 2"
+# insert data to db01 and db02
+curl -XPOST "http://localhost:8186/write?db=mydb" -d 'cpu,host=server01,region=uswest load=42 1434055562000000000'
+curl -XPOST "http://localhost:8286/write?db=mydb&consistency=all" -d 'cpu,host=server02,region=uswest load=78 1434055562000000000'
+curl -XPOST "http://localhost:8286/write?db=mydb&consistency=quorum" -d 'cpu,host=server03,region=useast load=15.4 1434055562000000000'
+
+curl -G "http://localhost:8286/query?pretty=true" --data-urlencode "db=mydb" --data-urlencode "q=SELECT * FROM cpu WHERE host='server01' AND time < now() - 1d"
+
+curl -G "http://localhost:8286/query?pretty=true" --data-urlencode "db=mydb" --data-urlencode "q=SELECT mean(load) FROM cpu WHERE region='uswest'"
+

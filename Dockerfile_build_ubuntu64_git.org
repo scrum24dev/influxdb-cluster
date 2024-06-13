@@ -1,11 +1,8 @@
 FROM ubuntu:focal
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    apt-get install -y software-properties-common python3-pip && \
-    pip3 install boto3 
-
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-#    python-software-properties \
+    python-software-properties \
+    software-properties-common \
     wget \
     git \
     mercurial \
