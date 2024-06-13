@@ -1,0 +1,16 @@
+version: "3.5"
+
+services:
+
+  influxdb-data-02:
+    image: chengshiwen/influxdb:1.8.10-c1.1.2-data
+    container_name: influxdb-data-02
+    hostname: influxdb-data-02
+    ports:
+      - 8086:8086
+    restart: unless-stopped
+    networks:
+      - influxdb-cluster
+
+networks:
+  influxdb-cluster:

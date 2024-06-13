@@ -1,0 +1,5 @@
+10.153.197.51 influxdb-meta-01
+10.153.197.52 influxdb-meta-02
+10.153.197.50 influxdb-meta-03
+10.153.197.53 influxdb-data-01
+10.153.197.54 influxdb-data-02

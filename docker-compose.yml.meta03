@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+
+  influxdb-meta-03:
+    image: chengshiwen/influxdb:1.8.10-c1.1.2-meta
+    container_name: influxdb-meta-03
+    hostname: influxdb-meta-03
+    restart: unless-stopped
+    networks:
+      - influxdb-cluster
+
+networks:
+  influxdb-cluster:
