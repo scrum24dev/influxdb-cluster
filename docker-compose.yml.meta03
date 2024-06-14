@@ -7,8 +7,11 @@ services:
     container_name: influxdb-meta-03
     hostname: influxdb-meta-03
     restart: unless-stopped
+    ports:
+      - 8091:8091
     networks:
       - influxdb-cluster
 
 networks:
   influxdb-cluster:
+    driver: bridge

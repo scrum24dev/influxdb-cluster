@@ -1,0 +1,6 @@
+# set to /etc/hosts for ap01-03, db01-02
+10.153.197.50   ap03 influxdb-meta-03
+10.153.197.51   ap01 influxdb-meta-01
+10.153.197.52   ap02 influxdb-meta-02
+10.153.197.53   db01 influxdb-data-01
+10.153.197.54   db02 influxdb-data-02

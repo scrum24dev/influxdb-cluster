@@ -7,8 +7,13 @@ services:
     container_name: influxdb-meta-02
     hostname: influxdb-meta-02
     restart: unless-stopped
+    ports:
+      - 8091:8091
+    volumes:
+      - ./influxdb-meta-02.conf:/etc/influxdb/influxdb.conf
     networks:
       - influxdb-cluster
 
 networks:
   influxdb-cluster:
+    driver: bridge

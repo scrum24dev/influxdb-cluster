@@ -9,8 +9,11 @@ services:
     ports:
       - 8086:8086
     restart: unless-stopped
+    volumes:
+      - ./influxdb-data-02.conf:/etc/influxdb/influxdb.conf
     networks:
       - influxdb-cluster
 
 networks:
   influxdb-cluster:
+    driver: bridge
