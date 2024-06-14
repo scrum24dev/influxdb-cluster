@@ -10,7 +10,7 @@ services:
     ports:
       - 8091:8091
     volumes:
-      - ./influxdb-meta-02.conf:/etc/influxdb/influxdb.conf
+      - ./influxdb-meta-02.conf:/etc/influxdb/influxdb-meta.conf
     networks:
       - influxdb-cluster
 
