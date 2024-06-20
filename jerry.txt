@@ -48,6 +48,7 @@ scp -i ~/.ssh/scloud.pem influxdb-meta.tar.tar itri@10.153.197.50:/tmp/
 scp -i ~/.ssh/scloud.pem influxdb-data.tar itri@10.153.197.50:/tmp/
 scp -i ~/.ssh/scloud.pem influxdb-cluster.tgz itri@10.153.197.50:/tmp/
 
+
 in ap03
 ls /tmp/
 docker load -i /tmp/influxdb-meta.tar
@@ -55,3 +56,5 @@ docker load -i /tmp/influxdb-data.tar
 cd ~;tar xvfz /tmp/influxdb-cluster.tgz
 
 
+# meta management node
+curl -G http://0.0.0.0:8091/cluster/nodes
