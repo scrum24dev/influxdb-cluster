@@ -74,3 +74,33 @@ cd ~;tar xvfz /tmp/influxdb-cluster.tgz
 
 # meta management node
 curl -G http://0.0.0.0:8091/cluster/nodes
+
+docker-compose up -d
+docker exec -it influxdb-meta-01 bash
+influxd-ctl add-meta influxdb-meta-01:8091
+influxd-ctl add-meta influxdb-meta-02:8091
+influxd-ctl add-meta influxdb-meta-03:8091
+influxd-ctl add-data influxdb-data-01:8088
+influxd-ctl add-data influxdb-data-02:8088
+influxd-ctl show
+
+influxd-ctl show shards
+influxd-ctl show-databases
+influxd-ctl show-users
+
+
+
+
+curl -G http://localhost:8087/query --data-urlencode "q=SHOW DATABASES"
+#curl -G http://localhost:8087/query --data-urlencode "q=DROP DATABASE mydb"
+
+
+# show meta nodes status
+curl -G http://<meta-node-address>:8091/debug/vars
+# show data nodes status
+curl -G http://<meta-node-address>:8091/cluster/nodes
+# show shards status
+curl -G http://<meta-node-address>:8091/query --data-urlencode "q=SHOW SHARDS"
+
+
+

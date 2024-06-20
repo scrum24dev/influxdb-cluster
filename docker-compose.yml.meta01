@@ -8,9 +8,8 @@ services:
     hostname: influxdb-meta-01
     restart: unless-stopped
     ports:
+      - 8088:8088
       - 8091:8091
-    volumes:
-      - ./etc/influxdb:/etc/influxdb
     networks:
       - influxdb-cluster
 
