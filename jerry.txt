@@ -11,6 +11,15 @@ ln -s Dockerfile_build_ubuntu32 Dockerfile
 docker build - < Dockerfile
 
 
+# pull for PMS server that is linux/amd64/v4
+docker pull --platform linux/amd64 chengshiwen/influxdb:1.8.10-c1.1.2-meta
+docker pull --platform linux/amd64 chengshiwen/influxdb:1.8.10-c1.1.2-meta
+
+# pull for Google server that is linux/arm64
+docker pull chengshiwen/influxdb:1.8.10-c1.1.2-meta
+docker pull chengshiwen/influxdb:1.8.10-c1.1.2-meta
+
+
 docker-compse up -d
 dcl
 
@@ -34,15 +43,22 @@ curl -G "http://localhost:8286/query?pretty=true" --data-urlencode "db=mydb" --d
 curl -G "http://localhost:8286/query?pretty=true" --data-urlencode "db=mydb" --data-urlencode "q=SELECT mean(load) FROM cpu WHERE region='uswest'"
 
 
+# pull for PMS server that is linux/amd64/v4
+docker pull --platform linux/amd64 chengshiwen/influxdb:1.8.10-c1.1.2-meta
+docker pull --platform linux/amd64 chengshiwen/influxdb:1.8.10-c1.1.2-meta
+
+# pull for Google server that is linux/amd
 docker pull chengshiwen/influxdb:1.8.10-c1.1.2-data
 docker pull chengshiwen/influxdb:1.8.10-c1.1.2-meta
+
 docker images
+docker image remove [image-id]
 
 chengshiwen/influxdb                       1.8.10-c1.1.2-meta   dabdef38bb26   18 months ago   152MB
 chengshiwen/influxdb                       1.8.10-c1.1.2-data   99dfbcc597e9   18 months ago   227MB
 
-docker save -o influxdb-meta.tar chengshiwen/influxdb:1.8.10-c1.1.2-meta
-docker save -o influxdb-data.tar chengshiwen/influxdb:1.8.10-c1.1.2-data
+docker save -o influxdb-meta.image.tar chengshiwen/influxdb:1.8.10-c1.1.2-meta
+docker save -o influxdb-data.image.tar chengshiwen/influxdb:1.8.10-c1.1.2-data
 alias ap03
 scp -i ~/.ssh/scloud.pem influxdb-meta.tar.tar itri@10.153.197.50:/tmp/
 scp -i ~/.ssh/scloud.pem influxdb-data.tar itri@10.153.197.50:/tmp/
@@ -51,8 +67,8 @@ scp -i ~/.ssh/scloud.pem influxdb-cluster.tgz itri@10.153.197.50:/tmp/
 
 in ap03
 ls /tmp/
-docker load -i /tmp/influxdb-meta.tar
-docker load -i /tmp/influxdb-data.tar
+docker load -i /tmp/influxdb-meta.image.tar
+docker load -i /tmp/influxdb-data.image.tar
 cd ~;tar xvfz /tmp/influxdb-cluster.tgz
 
 
