@@ -21,7 +21,7 @@ do
   #echo "sleep 10 ..."
   #sleep 10
 
-  ssh -i ~/.ssh/itri.pem itri@$host -l -c "mkdir -p ~/influxdb-cluster; scp ${source_host}:~/influxdb-cluster-master/docker-compose.yml.${influxdb_node} ~/influxdb-cluster/;cd ~/influxdb-cluster/;rm ~/influxdb-cluster/docker-compose.yml;ln -s docker-compose.yml.${influxdb_node} docker-compose.yml"
+  ssh -i ~/.ssh/itri.pem itri@$host -l -c "cd ~/influxdb-cluster; docker-compose up -d"
   #echo "sleep 10 ..."
   #sleep 10
 

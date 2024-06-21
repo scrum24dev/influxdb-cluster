@@ -96,11 +96,22 @@ curl -G http://localhost:8087/query --data-urlencode "q=SHOW DATABASES"
 
 
 # show meta nodes status
-curl -G http://<meta-node-address>:8091/debug/vars
+curl -G http://influxdb-meta-01:8091/debug/vars
 # show data nodes status
-curl -G http://<meta-node-address>:8091/cluster/nodes
+curl -G http://influxdb-meta-01:8091/cluster/nodes
 # show shards status
-curl -G http://<meta-node-address>:8091/query --data-urlencode "q=SHOW SHARDS"
+curl -G http://influxdb-meta-01:8091/query --data-urlencode "q=SHOW SHARDS"
 
 
+
+# create db
+curl -XPOST "http://influxdb-data-01:8087/query" --data-urlencode "q=CREATE DATABASE mydb WITH REPLICATION 2"
+# insert data to db01 and db02
+curl -XPOST "http://influxdb-data-01:8087/write?db=mydb" -d 'cpu,host=server01,region=uswest load=42 1434055562000000000'
+curl -XPOST "http://influxdb-data-02:8087/write?db=mydb&consistency=all" -d 'cpu,host=server02,region=uswest load=78 1434055562000000000'
+curl -XPOST "http://influxdb-data-02:8087/write?db=mydb&consistency=quorum" -d 'cpu,host=server03,region=useast load=15.4 1434055562000000000'
+
+curl -G "http://influxdb-data-01:8087/query?pretty=true" --data-urlencode "db=mydb" --data-urlencode "q=SELECT * FROM cpu WHERE host='server01' AND time < now() - 1d"
+
+curl -G "http://influxdb-data-01:8087/query?pretty=true" --data-urlencode "db=mydb" --data-urlencode "q=SELECT mean(load) FROM cpu WHERE region='uswest'"
 

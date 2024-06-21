@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
 
-  influxdb-meta-01:
+  influxdb-meta-01-5nodes:
     image: chengshiwen/influxdb:1.8.10-c1.1.2-meta
     container_name: influxdb-meta-01
     hostname: influxdb-meta-01
@@ -12,7 +12,7 @@ services:
     networks:
       - influxdb-cluster
 
-  influxdb-meta-02:
+  influxdb-meta-02-5nodes:
     image: chengshiwen/influxdb:1.8.10-c1.1.2-meta
     container_name: influxdb-meta-02
     hostname: influxdb-meta-02
@@ -22,7 +22,7 @@ services:
     networks:
       - influxdb-cluster
 
-  influxdb-meta-03:
+  influxdb-meta-03-5nodes:
     image: chengshiwen/influxdb:1.8.10-c1.1.2-meta
     container_name: influxdb-meta-03
     hostname: influxdb-meta-03
@@ -32,7 +32,7 @@ services:
     networks:
       - influxdb-cluster
 
-  influxdb-data-01:
+  influxdb-data-01-5nodes:
     image: chengshiwen/influxdb:1.8.10-c1.1.2-data
     container_name: influxdb-data-01
     hostname: influxdb-data-01
@@ -42,7 +42,7 @@ services:
     networks:
       - influxdb-cluster
 
-  influxdb-data-02:
+  influxdb-data-02-5nodes:
     image: chengshiwen/influxdb:1.8.10-c1.1.2-data
     container_name: influxdb-data-02
     hostname: influxdb-data-02
